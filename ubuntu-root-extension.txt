@@ -1,0 +1,21 @@
+Extending root partition of Ubuntu 18.04. Hyper-v Quick Create makes a single 10GB partition, which runs out of space quickly.
+
+0. Edit Ubuntu VM settings in Hyper-V: Hardware->SCI Controller->Hard Drive.
+Edit Virtual Hard disk (VM must be off). Expand virtual hard disk to the size you wwish.
+(For some reason using gparted live image to FIX the allocated disk space in step 4. causes havoc. Instead gparted from Ubuntu image seems to work)
+1. Boot, connect and login to Ubuntu
+2. Open terminal
+3. Install gparted
+# sudo apt-get install gparted
+4. Open gparted and choose to FIX the allocated disk space.
+5. Shut down Ubuntu.
+6. Download gparted live image (gparted-live-1.0.x.y-amd64.iso)
+7. Edit again VM settings in Hyper-V. Add a DVD drive to the VM under SCSI Controller and insert gparted live image asd Image File for the Media section of DVD Drive.
+8. Change the boot setup of VM: Edit Hardware->Firmware. Change boot order to use DVD Drive as the first boot entry.
+9. Boot VM. Connect to VM and use defaults for gparted keyboard, language and GUI settings.
+10. Run fcsk against the rootfs. (Open parted to shee the partition if you don't know which one)
+# e2fsck -f /dev/sdXY
+11. Open gparted, select root partition and select resize/move. Extend the partition the available space.
+12. Close gparted and shut down the live image.
+13. Boot VM (DVD Drive seems to be emptied automatically between boots)
+
